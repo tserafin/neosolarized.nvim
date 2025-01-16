@@ -5,6 +5,8 @@ local config = {
 	comment_italics = true,
 	background_set = false,
 	background_color = require("colorbuddy.init").Color.none,
+	different_sidebar_background = true,
+	sidebar_background_color = require("colorbuddy.init").Color.none,
 }
 
 local M = {
@@ -57,10 +59,15 @@ function M.set_colors()
 
 	if config.background_set and config.background_color == Color.none then
 		config.background_color = colors.base03
+		if config.different_sidebar_background then
+			config.sidebar_background_color = colors.base02
+		else
+			config.sidebar_background_color = colors.base03
+		end
 	end
 
 	local bg_color = config.background_color
-
+	local sb_bg_color = config.sidebar_background_color
 	Group.new("Normal", colors.base0, bg_color)
 	Group.new("NormalFloat", colors.base0, not config.background_set and Color.none or colors.base02)
 	-- normal non-current text
@@ -68,7 +75,7 @@ function M.set_colors()
 
 	Group.new("Comment", colors.base01, colors.none, config.comment_italics and styles.italic or styles.NONE)
 	Group.new("Constant", colors.cyan)
-	Group.new("Identifier", colors.blue)
+	Group.new("Identifier", colors.base0)
 
 	-- any statement, conditional, repeat (for, do while), label, operator
 	Group.new("Statement", colors.green)
@@ -80,20 +87,20 @@ function M.set_colors()
 	Group.new("Strikethrough", colors.base01, colors.none, styles.strikethrough)
 	Group.new("Ignore", colors.none)
 	Group.new("Error", colors.red)
-	Group.new("Todo", colors.magenta, colors.none, styles.bold)
+	Group.new("Todo", colors.magenta, colors.green, styles.bold)
 	Group.new("Function", colors.blue)
+	Group.new("Operator", colors.base0)
 	Group.link("Include", groups.PreProc)
 	Group.link("Macro", groups.PreProc)
 	Group.link("Keyword", groups.Statement)
-	Group.link("Delimiter", groups.Special)
+	Group.link("Delimiter", groups.Normal) -- was groups.Special
 	Group.link("Repeat", groups.Statement)
 	Group.link("Conditional", groups.Statement)
 	Group.link("Define", groups.PreProc)
-	Group.link("Operator", groups.Statement)
 	Group.link("Character", groups.Constant)
-	Group.link("Float", groups.Constant)
+	Group.link("Float", groups.Normal)
 	Group.link("Boolean", groups.Constant)
-	Group.link("Number", groups.Constant)
+	Group.link("Number", groups.Normal)
 	Group.link("Debug", groups.Special)
 	Group.link("Label", groups.Statement)
 	Group.link("Exception", groups.Statement)
@@ -102,7 +109,7 @@ function M.set_colors()
 
 	Group.link("SpecialChar", groups.Special)
 	Group.new("SpecialKey", colors.base00, colors.base02, styles.bold)
-	Group.new("Text", colors.cyan)
+	Group.new("Text", colors.cyan) -- was cyan
 	Group.link("String", groups.Text)
 	Group.new("NonText", colors.base00, colors.none, styles.bold)
 	Group.new("StatusLine", colors.base1, colors.base02, styles.reverse)
@@ -131,7 +138,7 @@ function M.set_colors()
 	Group.new("DiffDelete", colors.red, colors.base02, styles.bold)
 	Group.new("DiffText", colors.blue, colors.base02, styles.bold, colors.blue)
 
-	Group.new("SignColumn", colors.base0, colors.none, styles.NONE)
+	Group.new("SignColumn", colors.base0, sb_bg_color, styles.NONE)
 	Group.new("Conceal", colors.blue, colors.none, styles.NONE)
 
 	Group.new("SpellBad", colors.none, colors.none, styles.undercurl, colors.red)
@@ -158,9 +165,9 @@ function M.set_colors()
 	Group.new("TabLineSel", colors.yellow, bg_color)
 	Group.new("TabLineSeparatorSel", colors.cyan, colors.none)
 
-	Group.new("LineNr", colors.base01, bg_color, styles.NONE)
+	Group.new("LineNr", colors.base01, sb_bg_color, styles.NONE)
 	Group.new("CursorLine", colors.none, colors.base02, styles.NONE, colors.base1)
-	Group.new("CursorLineNr", colors.none, colors.none, styles.NONE, colors.base1)
+	Group.new("CursorLineNr", colors.none, sb_bg_color, styles.NONE, colors.base1)
 	Group.new("ColorColumn", colors.none, colors.base02, styles.NONE)
 	Group.new("Cursor", colors.base03, colors.base0, styles.NONE)
 	Group.link("lCursor", groups.Cursor)
@@ -169,10 +176,10 @@ function M.set_colors()
 
 	Group.new("MatchParen", colors.red, colors.base01, styles.bold)
 
-	Group.new("GitGutterAdd", colors.green)
-	Group.new("GitGutterChange", colors.yellow)
-	Group.new("GitGutterDelete", colors.red)
-	Group.new("GitGutterChangeDelete", colors.red)
+	Group.new("GitGutterAdd", colors.green, sb_bg_color)
+	Group.new("GitGutterChange", colors.yellow, sb_bg_color)
+	Group.new("GitGutterDelete", colors.red, sb_bg_color)
+	Group.new("GitGutterChangeDelete", colors.red, sb_bg_color)
 
 	Group.new("GitSignsAddLn", colors.green)
 	Group.new("GitSignsAddNr", colors.green)
@@ -323,6 +330,11 @@ function M.set_colors()
 	Group.new("NvimTreeRootFolder", colors.orange)
 	Group.new("NvimTreeImageFile", colors.orange)
 	Group.new("NvimTreeSpecialFile", colors.orange, colors.none, styles.bold + styles.underline)
+
+	-- nvim-neo-tree/neo-tree.nvim
+	Group.new("NeoTreeDirectoryIcon", colors.blue)
+	Group.new("NeoTreeRootNode", colors.orange)
+	--Group.new("NeoTreeFileName", colors.green)
 
 	-- phaazon/hop.nvim
 	Group.link("HopNextKey", groups.IncSearch)
