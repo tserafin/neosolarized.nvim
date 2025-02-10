@@ -79,7 +79,7 @@ function M.set_colors()
 
 	-- any statement, conditional, repeat (for, do while), label, operator
 	Group.new("Statement", colors.green)
-	Group.new("PreProc", colors.red) -- was orange
+	Group.new("PreProc", colors.orange)
 	Group.new("Type", colors.yellow)
 	Group.new("Special", colors.orange) -- was red
 	Group.new("SpecialKey", colors.base00)
